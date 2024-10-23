@@ -9,11 +9,13 @@ export class AllRoutes {
         const router = Router();
         const allController = new AllController();
 
-        router.get('/', allController.getall);
+        router.get('/', allController.getAll);
 
         router.get('/:id', allController.getAllById);
 
         router.post('/', allController.createAll);
+
+        router.put('/:id', allController.updateAll);
 
         return router;
     }
