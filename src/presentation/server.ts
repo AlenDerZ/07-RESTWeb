@@ -12,7 +12,7 @@ export class Server {
         //* Public Folder
         this.app.use(express.static('public'));
 
-        this.app.get('*', (req, res) => {
+        this.app.get(`*`, (req, res) => {
             const indexPath = path.join(__dirname, '../../public/index.html');
             res.sendFile(indexPath);
         })
