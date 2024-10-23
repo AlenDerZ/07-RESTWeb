@@ -19,13 +19,25 @@ export class AllController {
 
     public getAllById = (req:Request, res:Response) => {
         const id = +req.params.id;
-
         if(isNaN(id)) return res.status(400).json({error: 'Id must be a number'});
-
         const result = all.find(item => item.id === id);
 
         (result)
             ? res.json(result)
             : res.status(404).json({error: `All with id ${id} not found`});
+    }
+
+    public createAll = (req:Request, res:Response) => {
+        const {name} = req.body;
+        if(!name) return res.status(400).json({error: 'Name is required'});
+
+        const newAll = {
+            id: all.length + 1,
+            name: name,
+            createdAt: null
+        }
+
+        all.push(newAll)
+        res.json(newAll);
     }
 }

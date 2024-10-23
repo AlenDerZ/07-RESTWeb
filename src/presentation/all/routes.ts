@@ -13,6 +13,8 @@ export class AllRoutes {
 
         router.get('/:id', allController.getAllById);
 
+        router.post('/', allController.createAll);
+
         return router;
     }
 
