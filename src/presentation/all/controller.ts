@@ -57,6 +57,17 @@ export class AllController {
             : result.completedAt = new Date(completedAt || result.completedAt);
 
         res.json(result);
+    }
+
+    public deleteAll = (req:Request, res:Response) => {
+        const id = +req.params.id;
+        if(isNaN(id)) return res.status(400).json({error: 'Id must be a number'});
+
+        const result = all.find(item => item.id === id);
+        if(!result) return res.status(404).json({error: `All with id ${id} not found`});
+
+        all.splice(all.indexOf(result), 1);
+        res.json(result);
 
     }
 }

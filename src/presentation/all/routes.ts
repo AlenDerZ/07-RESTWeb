@@ -17,6 +17,8 @@ export class AllRoutes {
 
         router.put('/:id', allController.updateAll);
 
+        router.delete('/:id', allController.deleteAll);
+
         return router;
     }
 
