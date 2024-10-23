@@ -11,6 +11,8 @@ export class AllRoutes {
 
         router.get('/', allController.getall);
 
+        router.get('/:id', allController.getAllById);
+
         return router;
     }
 
