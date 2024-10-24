@@ -1,6 +1,6 @@
 import { prisma } from "../../data/postgres"; 
 import { Request, Response } from "express";
-import { CreateAllDto } from "../../domain/dtos";
+import { CreateAllDto, UpdateAllDto } from "../../domain/dtos";
 
 export class AllController {
 
@@ -37,19 +37,17 @@ export class AllController {
 
     public updateAll = async (req:Request, res:Response) => {
         const id = +req.params.id;
-        if(isNaN(id)) return res.status(400).json({error: 'Id must be a number'});
+        const [error, updateAllDto] = UpdateAllDto.create({...req.body, id});
+        if(error) return res.status(400).json({error});
 
-        const result = await prisma.all.findFirst({where: {id}});
+        const result = await prisma.all.findFirst({
+            where: {id}
+        });
         if(!result) return res.status(404).json({error: `All with id ${id} not found`});
-
-        const {name, completedAt} = req.body;
 
         const all = await prisma.all.update({
             where: {id},
-            data: { 
-                name, 
-                completedAt: (completedAt) ? new Date(completedAt) : null
-            }
+            data: updateAllDto!.values
         });
 
         res.json(all);
