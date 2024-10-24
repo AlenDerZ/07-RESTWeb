@@ -1,5 +1,6 @@
 import { prisma } from "../../data/postgres"; 
 import { Request, Response } from "express";
+import { CreateAllDto } from "../../domain/dtos";
 
 export class AllController {
 
@@ -23,11 +24,12 @@ export class AllController {
     }
 
     public createAll = async (req:Request, res:Response) => {
-        const {name} = req.body;
-        if(!name) return res.status(400).json({error: 'Name is required'});
 
+        const [error, createAllDto] = CreateAllDto.create(req.body);
+        if(error) return res.status(400).json({ error});
+        
         const all = await prisma.all.create({
-            data: { name }
+            data: createAllDto! 
         });
         
         res.json(all);
