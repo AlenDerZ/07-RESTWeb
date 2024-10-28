@@ -1,5 +1,5 @@
 
-export class TodoEntity {
+export class AllEntity {
 
     constructor(
         public id: number,
