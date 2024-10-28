@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { AllController } from "./controller";
+import { AllDatasourceImpl } from "../../infrastructure/datasources/all.datasource.impl";
+import { AllRepositoryImpl } from "../../infrastructure/repositories/all.repository.impl";
 
 
 export class AllRoutes {
@@ -7,7 +9,11 @@ export class AllRoutes {
     static get routes(): Router {
 
         const router = Router();
-        const allController = new AllController();
+
+        const datasource = new AllDatasourceImpl();
+        const repository = new AllRepositoryImpl(datasource);
+        
+        const allController = new AllController(repository);
 
         router.get('/', allController.getAll);
 

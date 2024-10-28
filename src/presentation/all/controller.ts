@@ -1,26 +1,29 @@
 import { prisma } from "../../data/postgres"; 
 import { Request, Response } from "express";
 import { CreateAllDto, UpdateAllDto } from "../../domain/dtos";
+import { AllRepository } from "../../domain";
 
 export class AllController {
 
     //* Dependencies Injection
-    constructor() {}
+    constructor(
+        private readonly allRepository: AllRepository
+    ) {}
 
     public getAll = async (req:Request, res:Response) => {
-        const all = await prisma.all.findMany();
-        res.json(all)
+        const all = await this.allRepository.getAll();
+        res.json(all);
     }
 
     public getAllById = async (req:Request, res:Response) => {
         const id = +req.params.id;
-        if(isNaN(id)) return res.status(400).json({error: 'Id must be a number'});
-        // const result = all.find(item => item.id === id);
-        const result = await prisma.all.findFirst({where: {id}});
 
-        (result)
-            ? res.json(result)
-            : res.status(404).json({error: `All with id ${id} not found`});
+        try{
+            const all = await this.allRepository.findById(id);
+            res.json(all);
+        }catch(error){
+            res.status(400).json({error});
+        }
     }
 
     public createAll = async (req:Request, res:Response) => {
@@ -28,10 +31,7 @@ export class AllController {
         const [error, createAllDto] = CreateAllDto.create(req.body);
         if(error) return res.status(400).json({ error});
         
-        const all = await prisma.all.create({
-            data: createAllDto! 
-        });
-        
+        const all = await this.allRepository.create(createAllDto!);
         res.json(all);
     }
 
@@ -40,31 +40,13 @@ export class AllController {
         const [error, updateAllDto] = UpdateAllDto.create({...req.body, id});
         if(error) return res.status(400).json({error});
 
-        const result = await prisma.all.findFirst({
-            where: {id}
-        });
-        if(!result) return res.status(404).json({error: `All with id ${id} not found`});
-
-        const all = await prisma.all.update({
-            where: {id},
-            data: updateAllDto!.values
-        });
-
-        res.json(all);
+        const updatedAll = await this.allRepository.updateById(updateAllDto!);
+        res.json(updatedAll);
     }
 
     public deleteAll = async (req:Request, res:Response) => {
         const id = +req.params.id;
-        if(isNaN(id)) return res.status(400).json({error: 'Id must be a number'});
-
-        const result = await prisma.all.findFirst({where: {id}});
-        if(!result) return res.status(404).json({error: `All with id ${id} not found`});
-
-        const deleted = await prisma.all.delete({where: {id}});
-
-        (deleted)
-            ? res.json({deleted})
-            : res.status(400).json({error: `All with id ${id} not found`});
-
+        const deleteAll = await this.allRepository.deleteById(id);
+        res.json(deleteAll);
     }
 }
