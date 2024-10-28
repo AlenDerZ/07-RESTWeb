@@ -3,7 +3,7 @@ import { AllEntity } from "../entities/all.entity";
 
 export abstract class AllRepository {
 
-    abstract create(CreateAllDto: CreateAllDto): Promise<AllEntity>;
+    abstract create(createAllDto: CreateAllDto): Promise<AllEntity>;
 
     //todo: paginación
     abstract getAll(): Promise<AllEntity[]>;

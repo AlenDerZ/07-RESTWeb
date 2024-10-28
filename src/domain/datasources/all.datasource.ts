@@ -1,9 +1,9 @@
 import { CreateAllDto, UpdateAllDto } from "../dtos";
 import { AllEntity } from "../entities/all.entity";
 
-export abstract class AllDataSource {
+export abstract class AllDatasource {
 
-    abstract create(CreateAllDto: CreateAllDto): Promise<AllEntity>;
+    abstract create(createAllDto: CreateAllDto): Promise<AllEntity>;
 
     //todo: paginación
     abstract getAll(): Promise<AllEntity[]>;
