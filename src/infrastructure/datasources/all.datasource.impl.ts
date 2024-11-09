@@ -1,5 +1,5 @@
 import { prisma } from "../../data/postgres";
-import { AllDatasource, AllEntity, CreateAllDto, UpdateAllDto } from "../../domain";
+import { AllDatasource, AllEntity, CreateAllDto, CustomError, UpdateAllDto } from "../../domain";
 
 export class AllDatasourceImpl implements AllDatasource {
 
@@ -21,7 +21,7 @@ export class AllDatasourceImpl implements AllDatasource {
             where: {id}
         });
 
-        if(!result) throw new Error(`All with id ${id} not found`);
+        if(!result) throw new CustomError(`All with id ${id} not found`, 404);
         return AllEntity.fromObject(result);
     }
 

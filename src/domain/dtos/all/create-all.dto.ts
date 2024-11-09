@@ -9,7 +9,7 @@ export class CreateAllDto {
         
         const { name } = props;
 
-        if(!name) return ['Name property is required', undefined];
+        if(!name || name.length === 0) return ['Name property is required', undefined];
         
         return [undefined, new CreateAllDto(name)];
     }
